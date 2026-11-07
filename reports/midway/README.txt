@@ -29,8 +29,8 @@ The separate Gradescope attachment could not be read because its download was
 declined. No upload or submission was made. The author will handle submission.
 
 Before submission: read and revise the draft, confirm the author details,
-grant teaching-team access to the private repository, and check any instructions
-in the separate course handout. The draft follows the author's stated instructor
+and check any instructions in the separate course handout. The repository is
+public, so teaching staff do not need invitations. The draft follows the author's stated instructor
 clarification that collaborative AI drafting with student review is permitted.
 
 Repository: https://github.com/weiweiwu007/cs329z-ml-agent
