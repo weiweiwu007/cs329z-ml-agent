@@ -41,14 +41,15 @@ Transformer & Sentiment: SST-2; paraphrases: MRPC & Pretrained BERT-Tiny with a 
 \textbf{Success criteria.} We measure best validation accuracy against cumulative compute, then test the selected model. We also record attempts, model size, timeouts, API cost, and agent decisions. Charged compute includes the baseline, worker execution, and diagnostics; API waiting and process startup are recorded separately. Thus equal compute does not mean equal total cost. All scores are calculated by code, not by an LLM judge.
 
 \section{Methods}
-\textbf{The harness.} As in Homework 1, the harness controls context, tool execution, and stopping. DSPy handles structured model calls \citep{khattab2023dspy}; Pydantic checks the returned fields; LangGraph connects the stages and checkpoints workflow state \citep{langchain2026langgraph}. Trusted Python code builds, trains, and scores each proposed model.
+\textbf{Harness design choices.} As in Homework 1, the harness controls context, tool execution, and stopping. DSPy handles structured model calls \citep{khattab2023dspy}; Pydantic checks returned fields; LangGraph connects stages and checkpoints workflow state \citep{langchain2026langgraph}.
 
-\begin{enumerate}
-\item \textbf{Plan.} Given the task, previous results, and remaining budget, the planner returns an observation, hypothesis, predicted effect, experiment, full model recipe, and supporting trial IDs.
-\item \textbf{Validate and execute.} Python checks the recipe, parameter count, and budget, then calls the PyTorch worker. Candidates use implemented model builders, with no arbitrary generated-code execution. Matching architectures reuse saved initial weights; changed architectures receive fresh seeded initialization. Candidates never inherit earlier trained weights.
-\item \textbf{Measure and review.} Every design receives aggregate scores and learning-curve summaries. B and D also receive automatically computed error reports. C and D call a separate reviewer, which states whether the result supports the prediction and recommends a next step. The planner chooses the next experiment; review is advisory.
-\item \textbf{Record and repeat.} The harness saves results, updates the best model and budget, and repeats. Overlong trials are stopped and charged. The same trained baseline is shared across designs, with its cost charged to each.
-\end{enumerate}
+\begin{itemize}
+\item \textbf{Structured decisions.} The planner returns a hypothesis, predicted effect, full model recipe, and supporting trial IDs. Recording predictions before training lets us compare expected and measured outcomes.
+\item \textbf{Validated training tools.} Python validates recipes, parameter counts, and budgets before calling the PyTorch worker; invalid recipes can be corrected. Fixed model builders keep actions consistent across A--D. Candidates start from saved initial weights when shapes match, or fresh seeded weights otherwise; they never inherit trained weights.
+\item \textbf{Controlled feedback and review.} All designs receive scores and learning-curve summaries. B/D also receive error reports; C/D get a review of the prediction and a next-step recommendation. The planner makes the next decision. This separation lets us test reports and review independently (Table~\ref{tab:designs}).
+\item \textbf{Bounded context, complete records.} Each call gets constraints, remaining resources, a compact attempt history, and selected baseline, best, and recent results. Details are trimmed to fit. Full call and experiment records, plus per-epoch validation logits and example IDs, remain on disk for later analysis.
+\item \textbf{Budget control and recovery.} The harness saves results, updates the best model and budget, and repeats within attempt, API-call, and compute limits. Overlong trials are stopped and charged. Saved state supports recovery from completed stages. Every design starts from the same baseline and is charged its cost.
+\end{itemize}
 
 \begin{table}[h]
 \caption{The two controlled harness choices. Scores, curve summaries, planner instructions, available model changes, and compute limits are shared across A--D.}
@@ -66,9 +67,7 @@ D: planner + reports + reviewer & Yes & Yes\\
 \end{tabular}
 \end{table}
 
-\textbf{Evidence and access.} Error reports are computed from validation predictions: classes with low recall, frequent class confusions, confident mistakes, and feature differences between correct and incorrect examples. A and C cannot access these reports, including through the reviewer. B and D receive them automatically, with diagnostic time charged to the budget. B--A and D--C compare report access; C--A and D--B compare review.
-
-\textbf{Context and memory.} Each call includes fixed task constraints, remaining resources, a short record of every attempt, and detailed baseline, best, and recent results. Context details are trimmed to fit; full prompts, outputs, plans, reviews, scores, costs, and failures stay on disk. Validation logits and example IDs are retained at each epoch for later error analysis. We can therefore trace decisions back to their evidence.
+\textbf{Evidence and access.} Error reports are computed from validation predictions: classes with low recall, frequent class confusions, confident mistakes, and feature differences between correct and incorrect examples. A and C cannot access these reports, including through the reviewer. B and D receive them automatically, with diagnostic time charged to the budget. B--A and D--C compare report access; C--A and D--B compare review. Other controls are fixed across designs and have not been separately evaluated.
 
 \section{Summary of Progress}
 \textbf{Implemented and demonstrated.} The runner, A--D access rules, model adapters, records, and plotting pipeline are implemented. The two Covertype studies contain 24 A--D workflow runs plus six random-search reference runs. A real-API setup chat saves a reviewed configuration; the demo then shows a completed optimization run. The setup screen does not launch training.
