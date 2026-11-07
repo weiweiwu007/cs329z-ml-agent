@@ -1,0 +1,32 @@
+{
+  "protocol_status": "draft",
+  "identity": "cifar100",
+  "revision": null,
+  "kind": "cifar100_binary",
+  "selection_rule": null,
+  "selection_seed": null,
+  "sources": {
+    "official_train": {
+      "path": null,
+      "sha256": null
+    },
+    "official_test": {
+      "path": null,
+      "sha256": null
+    }
+  },
+  "splits": {
+    "train": {
+      "source": "official_train",
+      "indices": null
+    },
+    "validation": {
+      "source": "official_train",
+      "indices": null
+    },
+    "test": {
+      "source": "official_test",
+      "indices": null
+    }
+  }
+}

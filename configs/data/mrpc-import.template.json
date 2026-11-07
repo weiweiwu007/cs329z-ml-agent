@@ -1,0 +1,34 @@
+{
+  "protocol_status": "draft",
+  "identity": "mrpc",
+  "revision": null,
+  "kind": "text_tsv",
+  "selection_rule": null,
+  "selection_seed": null,
+  "sources": {
+    "labeled_source": {
+      "path": null,
+      "sha256": null
+    }
+  },
+  "splits": {
+    "train": {
+      "source": "labeled_source",
+      "indices": null
+    },
+    "validation": {
+      "source": "labeled_source",
+      "indices": null
+    },
+    "test": {
+      "source": "labeled_source",
+      "indices": null
+    }
+  },
+  "delimiter": "\t",
+  "label_column": "Quality",
+  "text_columns": {
+    "sentence1": "#1 String",
+    "sentence2": "#2 String"
+  }
+}

@@ -1,0 +1,6 @@
+task,arm,decisions,mean_fields_changed_from_best,share_changing:Optimization,share_changing:Regularization,share_changing:Architecture,share_changing:Input handling,share_changing:Class balance,exact_repeat_rate,failure_rate,built_on_best_rate,plan_mentions_class_rate,mean_weak_class_recall_change,mean_accuracy_change
+covertype,A,16,1.875,0.8125,0.0,0.3125,0.0,0.0,0.0,0.0,0.9375,0.0,0.0031022348380853083,0.0016963993735047492
+covertype,B,19,1.631578947368421,0.7368421052631579,0.0,0.2631578947368421,0.0,0.0,0.0,0.05263157894736842,0.8947368421052632,0.0,-0.029354064059810916,-0.015406122288964232
+covertype,C,25,1.36,0.76,0.0,0.44,0.0,0.0,0.0,0.0,0.88,0.0,-0.03968492916891341,-0.012013921160278366
+covertype,D,32,1.21875,0.65625,0.0,0.3125,0.0,0.0,0.03125,0.0,0.90625,0.0,-0.03931842954364748,-0.01262370699299497
+covertype,random,20,12.6,1.0,1.0,1.0,0.75,0.65,0.0,0.0,0.75,0.0,0.06191913547454252,-0.3790407576259192

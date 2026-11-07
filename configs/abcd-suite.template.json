@@ -1,0 +1,22 @@
+{
+  "protocol_status": "draft",
+  "cases": [
+    {
+      "task": "spambase.template.json",
+      "seeds": null
+    },
+    {
+      "task": "cifar100.template.json",
+      "seeds": null
+    },
+    {
+      "task": "sst2.template.json",
+      "seeds": null
+    },
+    {
+      "task": "mrpc.template.json",
+      "seeds": null
+    }
+  ],
+  "orders": null
+}

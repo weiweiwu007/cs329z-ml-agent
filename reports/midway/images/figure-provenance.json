@@ -1,0 +1,63 @@
+{
+  "purpose": "Report visualization of existing study outputs; no experiment reruns",
+  "inputs": [
+    {
+      "file": "studies/mlp-covertype/figures/abcd_curves.csv",
+      "sha256": "ae06e80af8d88fab26095c20fef9286a0cbb6803a831770f4d0cf0cbded7cd60",
+      "bytes": 2935,
+      "rows": 57,
+      "time_column": "compute_minutes",
+      "seconds_per_input_unit": 60.0,
+      "score_column": "mean_best_validation_accuracy",
+      "score_display_multiplier": 100,
+      "visible_x_limits_seconds": [
+        0,
+        168
+      ],
+      "visible_y_limits_percent": [
+        80,
+        96
+      ]
+    },
+    {
+      "file": "studies/mlp-covertype-600s/figures/abcd_curves.csv",
+      "sha256": "4f8b948b83c0e360c2f6ea833e4e253ce45169139137aea1df313b890fe4202f",
+      "bytes": 4984,
+      "rows": 100,
+      "time_column": "compute_seconds",
+      "seconds_per_input_unit": 1.0,
+      "score_column": "mean_best_validation_accuracy",
+      "score_display_multiplier": 100,
+      "visible_x_limits_seconds": [
+        0,
+        600
+      ],
+      "visible_y_limits_percent": [
+        80,
+        96
+      ]
+    }
+  ],
+  "aggregation": "No aggregation change. Each CSV already contains the saved mean best-validation curve over three seeds, using the original study's incumbent interpolation. Rows and their ordering are preserved. Only units change: minutes to seconds where needed, and accuracy fractions to percentages.",
+  "rendering": "Post-step curves, shared 80-96 percent y axis. The 168-second panel clips the display at its nominal budget; source rows extending slightly beyond it remain unchanged. No values are filled, smoothed, resampled, or fitted.",
+  "figure_inches": [
+    5.5,
+    2.25
+  ],
+  "script": {
+    "file": "make_figures.py",
+    "sha256": "0b9afb93524ae9ec8a72c1efeac4a1ac8aba544976547bbb67e6ffc225af31f4"
+  },
+  "outputs": [
+    {
+      "file": "agent_design_curves.pdf",
+      "sha256": "28cfec6e54f70dca6475c98275b9cf3d82de4e15b2183c5a48d44aded9205015",
+      "bytes": 14758
+    },
+    {
+      "file": "agent_design_curves.png",
+      "sha256": "c957f8631aa8fd6cedc4fca100900bc91a4912e551c238998c12c094d80220c6",
+      "bytes": 79403
+    }
+  ]
+}

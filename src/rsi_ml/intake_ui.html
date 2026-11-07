@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>ML experiment assistant</title>
+  <style>
+    :root {
+      --paper: #f7f6f2;
+      --surface: #fffefa;
+      --ink: #252b26;
+      --muted: #6f756e;
+      --line: #e3e4da;
+      --green: #355a45;
+      --green-soft: #e8eee5;
+      --error: #9b403a;
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, textarea { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: default; opacity: .5; }
+    button, textarea, summary { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 3px solid #9bae90; outline-offset: 4px; }
+    .shell {
+      width: min(860px, 100%);
+      min-height: 100dvh;
+      padding: 28px 32px 20px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+    header { display: flex; align-items: center; gap: 12px; padding-bottom: 22px; }
+    .mark {
+      width: 37px;
+      height: 37px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border: 1px solid #d6dfd1;
+      background: var(--green-soft);
+      color: var(--green);
+      border-radius: 12px;
+    }
+    .brand { font-size: 15px; font-weight: 650; letter-spacing: -.2px; }
+    .header-actions { margin-left: auto; }
+    .quiet-button {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    .quiet-button:hover { border-color: #bec9b8; color: var(--ink); background: #f1f2eb; }
+    .welcome { flex: 1; display: grid; align-content: center; justify-items: start; padding: 8vh 0 16vh; }
+    .eyebrow { color: var(--green); text-transform: uppercase; font-size: 11px; font-weight: 700; letter-spacing: 1.8px; }
+    h1 { margin: 15px 0 12px; font-size: clamp(32px, 5vw, 48px); line-height: 1.13; letter-spacing: -1.7px; font-weight: 620; }
+    .welcome p { color: var(--muted); margin: 0; font-size: 18px; }
+    .primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border: 1px solid var(--green);
+      background: var(--green);
+      color: white;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 15px;
+      font-weight: 550;
+    }
+    .primary:hover { background: #294c38; }
+    .welcome .primary { margin-top: 29px; }
+    .welcome-note { margin-top: 16px !important; font-size: 13px !important; }
+    .conversation { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+    .conversation-heading { margin: 16px 0 22px; }
+    .conversation-heading h2 { font-size: 26px; font-weight: 600; letter-spacing: -.8px; margin: 0 0 4px; }
+    .conversation-heading p { font-size: 14px; color: var(--muted); margin: 0; }
+    .messages { display: flex; flex-direction: column; gap: 20px; padding: 0 0 22px; }
+    .message { max-width: 91%; animation: appear 180ms ease-out; }
+    .message.user { align-self: flex-end; max-width: 83%; }
+    .speaker { font-size: 11px; font-weight: 650; color: var(--muted); margin: 0 0 6px 2px; letter-spacing: .2px; }
+    .message.user .speaker { text-align: right; margin-right: 3px; }
+    .bubble { white-space: pre-wrap; overflow-wrap: anywhere; padding: 16px 19px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px 15px 15px; }
+    .message.user .bubble { background: var(--green-soft); border-color: #dce4d7; border-radius: 15px 4px 15px 15px; padding: 12px 17px; }
+    .review { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin: 0 0 20px; }
+    .review h3 { font-size: 14px; margin: 0 0 13px; font-weight: 650; }
+    .review dl { display: grid; grid-template-columns: minmax(120px, 1fr) 2fr; gap: 9px 18px; font-size: 14px; margin: 0; }
+    .review dt { color: var(--muted); }
+    .review dd { margin: 0; overflow-wrap: anywhere; }
+    .composer-wrap { position: sticky; bottom: 0; margin-top: auto; padding: 13px 0 12px; background: linear-gradient(transparent, var(--paper) 12px); }
+    form { display: flex; align-items: flex-end; gap: 10px; padding: 10px 11px 10px 16px; background: var(--surface); border: 1px solid #cdd5c6; border-radius: 13px; box-shadow: 0 4px 16px #28362106; }
+    form:focus-within { border-color: #829b76; box-shadow: 0 0 0 3px #dfe7d866; }
+    textarea { flex: 1; min-width: 0; resize: none; background: none; border: 0; color: var(--ink); min-height: 37px; max-height: 160px; padding: 7px 0; line-height: 1.45; }
+    textarea:focus { outline: none; }
+    textarea::placeholder { color: #94998f; }
+    .send { background: var(--green); color: #fff; border: 0; border-radius: 9px; height: 37px; width: 37px; flex: 0 0 auto; display: grid; place-items: center; }
+    .send:hover { background: #294c38; }
+    .composer-hint { color: #8a9085; font-size: 11px; padding: 7px 2px 0; }
+    .error { color: var(--error); font-size: 14px; margin: 10px 0; padding: 10px 13px; border-radius: 8px; background: #f8eeeb; }
+    .ready { padding-bottom: 20px; }
+    .ready-note { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
+    .download { color: var(--green); background: var(--surface); border: 1px solid #cbd8c3; border-radius: 8px; padding: 9px 13px; font-size: 14px; font-weight: 550; }
+    .download:hover { background: var(--green-soft); }
+    details { margin-top: 16px; font-size: 13px; }
+    summary { color: var(--muted); cursor: pointer; width: fit-content; }
+    pre { padding: 16px; overflow: auto; max-height: 360px; background: #eeefe7; border: 1px solid var(--line); border-radius: 8px; font-size: 12px; line-height: 1.5; white-space: pre; }
+    footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 10px; font-size: 11px; color: #93998f; padding-top: 14px; }
+    .model-name { display: block; overflow-wrap: anywhere; }
+    .pending { width: 14px; height: 14px; border: 2px solid #ffffff60; border-top-color: white; border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes appear { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; scroll-behavior: auto !important; } }
+    @media (max-width: 600px) {
+      .shell { padding: 18px 18px 14px; }
+      header { padding-bottom: 13px; }
+      .brand { font-size: 13px; }
+      .mark { width: 31px; height: 31px; border-radius: 9px; }
+      .quiet-button { font-size: 12px; padding: 6px 9px; }
+      .welcome { padding-bottom: 20vh; }
+      .welcome p { font-size: 16px; }
+      .conversation-heading { margin-top: 10px; }
+      .message { max-width: 96%; }
+      .message.user { max-width: 92%; }
+      .bubble { padding: 13px 15px; font-size: 15px; }
+      .review { padding: 16px; }
+      .review dl { grid-template-columns: 1fr; gap: 3px; }
+      .review dd { margin-bottom: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="mark" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 18V9m7 9V5m7 13v-6" stroke-linecap="round"/><circle cx="5" cy="6" r="1.5"/><circle cx="12" cy="2.5" r="1.5"/><circle cx="19" cy="9" r="1.5"/></svg>
+      </div>
+      <span class="brand">ML experiment assistant</span>
+      <div class="header-actions"><button id="reset" class="quiet-button" hidden>New experiment</button></div>
+    </header>
+
+    <section id="welcome" class="welcome" aria-labelledby="welcome-title">
+      <span class="eyebrow">From a question to an experiment</span>
+      <h1 id="welcome-title">What would you<br>like to improve?</h1>
+      <p>Describe the task. Set the limits. Start.</p>
+      <button id="begin" class="primary">New experiment <span aria-hidden="true">↗</span></button>
+      <p class="welcome-note">A few questions to prepare your ML experiment.</p>
+      <div id="welcome-error" class="error" role="alert" hidden></div>
+    </section>
+
+    <section id="conversation" class="conversation" aria-label="Experiment setup" hidden>
+      <div class="conversation-heading">
+        <h2>Let’s set up your experiment.</h2>
+        <p>Tell me what you need. I’ll prepare the configuration.</p>
+      </div>
+      <div id="messages" class="messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+      <section id="review" class="review" aria-labelledby="review-title" hidden>
+        <h3 id="review-title">Your experiment</h3>
+        <dl id="summary"></dl>
+        <details><summary>Training and reproducibility details</summary><dl id="extra-summary" style="margin-top:14px"></dl></details>
+      </section>
+      <div id="chat-error" class="error" role="alert" hidden></div>
+      <section id="ready" class="ready" aria-label="Prepared configuration" hidden>
+        <p class="ready-note">Configuration saved. Optimization has not been launched from this setup screen.</p>
+        <button id="download" class="download">Download configuration <span aria-hidden="true">↓</span></button>
+        <details id="config-details">
+          <summary>View generated configuration</summary>
+          <pre id="config-text">Loading…</pre>
+        </details>
+      </section>
+      <div id="composer-wrap" class="composer-wrap">
+        <form id="composer">
+          <textarea id="message" rows="1" maxlength="4000" placeholder="Tell me what you have in mind…" aria-label="Your reply" required></textarea>
+          <button id="send" class="send" type="submit" aria-label="Send reply"><span aria-hidden="true">↑</span></button>
+        </form>
+        <div class="composer-hint">Enter to send · Shift + Enter for a new line</div>
+      </div>
+    </section>
+    <footer><span>Live model · Covertype demo<span id="model-name" class="model-name" hidden></span></span><span id="footer-status">Ready when you are</span></footer>
+  </main>
+
+  <script>
+    'use strict';
+    const $ = (id) => document.getElementById(id);
+    let current = null;
+    let busy = false;
+    let shown = 0;
+    let configText = null;
+    let pendingSubmission = null;
+
+    function setBusy(value) {
+      busy = value;
+      for (const id of ['begin', 'reset', 'send', 'message', 'download']) $(id).disabled = value;
+      $('send').replaceChildren();
+      const indicator = document.createElement('span');
+      indicator.setAttribute('aria-hidden', 'true');
+      if (value) indicator.className = 'pending';
+      else indicator.textContent = '↑';
+      $('send').append(indicator);
+      $('composer').setAttribute('aria-busy', String(value));
+    }
+
+    function showError(error) {
+      const box = $(current ? 'chat-error' : 'welcome-error');
+      box.textContent = error.message || String(error);
+      box.hidden = false;
+    }
+
+    async function request(url, options = {}) {
+      const response = await fetch(url, {
+        ...options,
+        headers: { 'X-Intake-Client': 'local', ...(options.headers || {}) },
+      });
+      const text = await response.text();
+      let data;
+      try { data = JSON.parse(text); }
+      catch { throw new Error(response.ok ? 'The setup service returned an unreadable response.' : 'Could not reach the setup service. Please try again.'); }
+      if (!response.ok) throw new Error(data.error || data.message || 'The request could not be completed.');
+      return data;
+    }
+
+    function readable(value) {
+      if (Array.isArray(value)) return value.map(readable).join(', ');
+      if (value && typeof value === 'object') return Object.entries(value).map(([key, item]) => `${key}: ${readable(item)}`).join(' · ');
+      return value == null ? 'Not set' : String(value);
+    }
+
+    function render(data) {
+      current = data;
+      $('welcome').hidden = true;
+      $('conversation').hidden = false;
+      $('reset').hidden = false;
+      const messages = data.messages || [];
+      if (messages.length < shown) { $('messages').replaceChildren(); shown = 0; }
+      for (const message of messages.slice(shown)) {
+        const block = document.createElement('div');
+        block.className = 'message ' + (message.role === 'user' ? 'user' : 'assistant');
+        const label = document.createElement('div');
+        label.className = 'speaker';
+        label.textContent = message.role === 'user' ? 'You' : 'Assistant';
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.textContent = message.content;
+        block.append(label, bubble);
+        $('messages').append(block);
+      }
+      shown = messages.length;
+      $('summary').replaceChildren();
+      $('extra-summary').replaceChildren();
+      const hasSummary = data.summary && Object.keys(data.summary).length > 0;
+      $('review').hidden = !hasSummary;
+      if (hasSummary) {
+        for (const [key, value] of Object.entries(data.summary)) {
+          const term = document.createElement('dt');
+          term.textContent = key.replaceAll('_', ' ').replace(/^./, (letter) => letter.toUpperCase());
+          const definition = document.createElement('dd');
+          definition.textContent = readable(value);
+          const mainKeys = ['Task', 'Dataset', 'Target and score', 'Starting model', 'Limits', 'Workflow'];
+          $(mainKeys.includes(key) ? 'summary' : 'extra-summary').append(term, definition);
+        }
+      }
+      const ready = data.status === 'ready';
+      $('ready').hidden = !ready;
+      $('composer-wrap').hidden = ready;
+      $('model-name').textContent = data.model || '';
+      $('model-name').hidden = !data.model;
+      $('footer-status').textContent = ready ? 'Configuration ready' : data.status === 'review' ? 'Review your experiment' : 'Preparing your experiment';
+      requestAnimationFrame(() => {
+        // The composer is sticky, so scrolling it into view can leave the new
+        // answer below the viewport. Follow the actual document end instead.
+        window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' });
+      });
+    }
+
+    async function begin() {
+      if (busy) return;
+      setBusy(true);
+      $('welcome-error').hidden = true;
+      $('chat-error').hidden = true;
+      try {
+        const data = await request('/api/session');
+        $('messages').replaceChildren();
+        shown = 0;
+        configText = null;
+        pendingSubmission = null;
+        $('config-details').open = false;
+        $('config-text').textContent = 'Loading…';
+        $('message').value = '';
+        $('message').style.height = '';
+        render(data);
+      } catch (error) { showError(error); }
+      finally { setBusy(false); if (current && current.status !== 'ready') $('message').focus(); }
+    }
+
+    async function submitMessage(value) {
+      const message = value.trim();
+      if (busy || !current || !message || current.status === 'ready') return;
+      if (!pendingSubmission || pendingSubmission.message !== message || pendingSubmission.sessionId !== current.session_id) {
+        pendingSubmission = { requestId: crypto.randomUUID(), sessionId: current.session_id, message };
+      }
+      setBusy(true);
+      $('chat-error').hidden = true;
+      try {
+        const data = await request('/api/message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: current.session_id, message, request_id: pendingSubmission.requestId }),
+        });
+        pendingSubmission = null;
+        $('message').value = '';
+        $('message').style.height = '';
+        render(data);
+      } catch (error) { showError(error); }
+      finally { setBusy(false); if (current.status !== 'ready') $('message').focus(); }
+    }
+
+    async function getConfig() {
+      if (!current || !current.config_url) throw new Error('The configuration is not ready yet.');
+      if (configText === null) configText = JSON.stringify(await request(current.config_url), null, 2) + '\n';
+      return configText;
+    }
+
+    $('begin').addEventListener('click', begin);
+    $('reset').addEventListener('click', begin);
+    $('composer').addEventListener('submit', (event) => { event.preventDefault(); submitMessage($('message').value); });
+    $('message').addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
+        event.preventDefault();
+        submitMessage($('message').value);
+      }
+    });
+    $('message').addEventListener('input', () => {
+      if (pendingSubmission && pendingSubmission.message !== $('message').value.trim()) pendingSubmission = null;
+      $('message').style.height = 'auto';
+      $('message').style.height = Math.min($('message').scrollHeight, 160) + 'px';
+    });
+    $('config-details').addEventListener('toggle', async () => {
+      if (!$('config-details').open) return;
+      try { $('config-text').textContent = await getConfig(); }
+      catch (error) { $('config-text').textContent = error.message; }
+    });
+    $('download').addEventListener('click', async () => {
+      if (busy) return;
+      setBusy(true);
+      try {
+        const text = await getConfig();
+        const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = (current.config_path || 'experiment.json').split(/[\\/]/).pop();
+        document.body.append(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      } catch (error) { showError(error); }
+      finally { setBusy(false); }
+    });
+  </script>
+</body>
+</html>

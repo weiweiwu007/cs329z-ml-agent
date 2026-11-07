@@ -1,0 +1,63 @@
+[
+  {
+    "id": "controlled_experiment",
+    "families": [
+      "mlp_classification",
+      "language_model",
+      "diffusion",
+      "cifar100_classification",
+      "text_classification"
+    ],
+    "title": "Make an experiment distinguish competing explanations",
+    "rule": "State an observation, hypothesis, measurable prediction, and controlled comparison. A successful run is not proof of the hypothesis; compare against the recorded baseline and treat small differences as uncertain.",
+    "applicability": "Project evaluation discipline; all model families.",
+    "source": "Project protocol: measured task scores, matched starting models and budgets."
+  },
+  {
+    "id": "wsd",
+    "families": [
+      "mlp_classification",
+      "language_model",
+      "cifar100_classification",
+      "text_classification"
+    ],
+    "title": "Warmup, stable learning rate, then decay",
+    "rule": "A cooldown may reveal progress masked by high-learning-rate fluctuations. Test against a matched continuation; peak LR and cooldown duration still require validation.",
+    "applicability": "Published theory assumes river-valley structure and experiments concern language-model pretraining. MLP use is an exploratory transfer, not an established advantage. This v1 implements linear warmup and linear terminal decay, not WSD-S checkpoint reuse.",
+    "source": "https://arxiv.org/abs/2410.05192"
+  },
+  {
+    "id": "bohb",
+    "families": [
+      "mlp_classification",
+      "language_model",
+      "diffusion",
+      "cifar100_classification",
+      "text_classification"
+    ],
+    "title": "Conventional hyperparameter optimization",
+    "rule": "Bayesian search and resource allocation are strong alternatives for numeric tuning. Agent experiments should justify their extra cost.",
+    "applicability": "Reference method. The built-in v1 baseline is explicitly random search; BOHB is not implemented or claimed.",
+    "source": "https://proceedings.mlr.press/v80/falkner18a.html"
+  },
+  {
+    "id": "mup",
+    "families": [
+      "language_model"
+    ],
+    "title": "Hyperparameter transfer across width",
+    "rule": "A compatible smaller model under maximal-update parameterization can inform settings for a wider model.",
+    "applicability": "Requires correct parameterization and supported architecture changes. Not implemented by the standard-parameterized MLP adapter.",
+    "source": "https://arxiv.org/abs/2203.03466"
+  },
+  {
+    "id": "edm2",
+    "families": [
+      "diffusion"
+    ],
+    "title": "Inspect activation, weight, and update magnitudes",
+    "rule": "Measure magnitude drift before selecting an intervention. Use an unchanged external evaluation objective if changing loss weights or noise sampling.",
+    "applicability": "Future diffusion adapter; no diffusion training is implemented in v1.",
+    "source": "https://arxiv.org/abs/2312.02696"
+  }
+]

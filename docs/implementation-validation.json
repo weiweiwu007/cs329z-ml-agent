@@ -1,0 +1,109 @@
+{
+  "kind": "software_validation_only",
+  "date": "2026-11-01",
+  "pytest_passed": 83,
+  "ruff": "passed",
+  "pip_check": "passed",
+  "project_experiments_launched": 0,
+  "external_api_calls": 0,
+  "project_dataset_downloads": 0,
+  "pretrained_checkpoint_downloads": 0,
+  "test_scope": "CPU synthetic MLP/CNN fixtures, locally generated toy BERT checkpoint, stubbed A-D runs, offline DSPy DummyLM; no project benchmarks or GPU execution",
+  "planning_check": {
+    "suite_status": "draft",
+    "training_launched": false,
+    "api_calls": 0,
+    "cases": [
+      {
+        "task_id": "spambase",
+        "status": "draft",
+        "budgets_unset": true
+      },
+      {
+        "task_id": "cifar100",
+        "status": "draft",
+        "budgets_unset": true
+      },
+      {
+        "task_id": "sst2",
+        "status": "draft",
+        "budgets_unset": true
+      },
+      {
+        "task_id": "mrpc",
+        "status": "draft",
+        "budgets_unset": true
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.13.5 (v3.13.5:6cb20a219a8, Jun 11 2025, 12:23:45) [Clang 16.0.0 (clang-1600.0.26.6)]",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "hardware": {
+      "cpu": "arm",
+      "logical_cpus": 14,
+      "cuda_devices": [],
+      "cuda_runtime": null
+    },
+    "packages": {
+      "rsi-ml": "0.1.0",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "langgraph": "1.2.17",
+      "pydantic": "2.14.1",
+      "dspy": "3.4.1",
+      "transformers": "4.57.6",
+      "tokenizers": "0.22.2",
+      "safetensors": "0.8.0"
+    },
+    "source_hashes": {
+      "__init__.py": "373da0d8dfbab066a2fd7120dcd8b25ba30d3d75264ba192cc1f017cb94140a3",
+      "__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+      "agents.py": "a540df58f3acd7b394b2bb5483b7f9a4b9c3a8ca800649a86c79082ad88093a6",
+      "baseline.py": "65554b0adc8747dbb9ace2e019b59911d848ad8eddf5801b7a97de06aeadcf39",
+      "cli.py": "23ff7df352f6ee1363dbdd4655012d619eeca95eb111e5be7eb7b2d75a53d635",
+      "comparison.py": "9bf8f428d80c46517efeb04ff90c5c41cbe49df95cf66a423a417c9e10a3e1a4",
+      "context.py": "8e528ff774ac4829d16eea3c24d6a836b64eb58b475a6f2b1daff30fab1a7f2b",
+      "data.py": "05370f0a771214000d10eef0f5eac990401d9f3e0a12a8d621a0e65e4f4f60ef",
+      "diagnostics.py": "df16f3daf8d9477c39d8b46c9cf82dd55de0e8a371af0c80ff34a84d0aa8f559",
+      "evaluation.py": "a44d172269d16125dd4e633b7900e29505d516bb6fadc14463b7c7f84084def1",
+      "improvement.py": "6839b60941afd6a97d613527b5356efa6c04e593796fe9dec8c7cd16690248e5",
+      "report.py": "654a4b7e9bed4294c60d82e3243339774b477c5ae579fdd40f00fa67e8805a3a",
+      "schemas.py": "a1687c56b9cc8057d11ef038e79bcd5bc34120adbbe3b286fc973fa1de9e43ad",
+      "storage.py": "76140f36c665b9c6050cb86c0617fdc9da4758a1015108142bfce8edd68ed22b",
+      "tasks/__init__.py": "7f71da144752867c02f42b59db96369107ae7067fefe85bbb0d17dff8b8d2bf9",
+      "tasks/base.py": "cd3996ad51e3c1c3186cd0f93814656b61e175b38cce97d216ce41096816cf87",
+      "tasks/cnn.py": "1ba8bbc840ef37ce149381d22448dc144223a6e9ce3ebebb50b6b2ed6d3b8a55",
+      "tasks/mlp.py": "bd609476eb2d629284b8d1945a76d78a55eae4e37a1ce09e65110ba5ad95c714",
+      "tasks/registry.py": "669c1b8014313d9fd19401180cfca8717fa91afcd6737710dd1ba026befbd89d",
+      "tasks/text.py": "938becd1fd0b004e96a13d56b7ed18d88e4624cd408c471de386e39e5be084c6",
+      "tasks/training.py": "fb1727b4a587b63943f4855d7e19e031fcb013f6cae692677b8dd62bff9f94b5",
+      "worker.py": "11c676be0569b43cd77d5495b6954fab461cc946dc9c9b4b129095d65e3aeb1e",
+      "workflow.py": "7b89239b177bacf642384267f01c47dc3c924f58ee65315ddce030284023d140",
+      "knowledge.json": "348dc7e2bccbd82442dbc3334b5c90787d79620e772aa89355fb39d427f57d06"
+    }
+  },
+  "config_sha256": {
+    "configs/abcd-suite.template.json": "54cda4e6532dd0f934abff1942eba1c718f5867f31d0b7950413882bb8e1af3b",
+    "configs/cifar100.template.json": "6dd7250145e9fe9ba65b64edb42b6fb509761c426fe91539feb0e10938ea357c",
+    "configs/data/cifar100-import.template.json": "183cf4e573b2ec23f76db1bb34c8b30b7f40402de49bab7cd78d3b592a65f279",
+    "configs/data/mrpc-import.template.json": "a37a59db9d2b695034bbb01febc706a037e9c9c84328dc1a2f0a13683484d9f1",
+    "configs/data/spambase-import.template.json": "010aeda665a8b71a68fecfaab40e5ccfca0b5d72975075ab092dec64a37c1434",
+    "configs/data/sst2-import.template.json": "118f4fa0549bfe3613063958ca604f8e07f6dcb745e7faa4b024b925d1077fd8",
+    "configs/demo-suite.json": "69e19ab5794125eccdd89b0a09f60bcb84b2df0306d59f75ce8768644230e25b",
+    "configs/mlp-demo.json": "84405d09eaaeb9b740151319686a138cf7dda85f34dafb0470c918b29e27066d",
+    "configs/mlp-local.template.json": "3160f166950e39c51c0317a33e036c68e17bb78585e98216c11b2d1442d2a812",
+    "configs/mrpc.template.json": "936e46ddcad2b625bacb337fe9d359a06fbc9109907a60a6f7b3989b21abd019",
+    "configs/policy.json": "3b8b5fb5d66eef0b78ee0c14a6a219195a37f89e4bbb420f7b87ce86e027e79d",
+    "configs/spambase.template.json": "49fc07b680b2b2c14dd8c2aac724ca551376b863fba9af26dbb4822410267a2c",
+    "configs/sst2.template.json": "fd22cc0b28de6f9baa743a0ef98ea5ae53bceaf20f99c31fe34d3c4931ab1896"
+  },
+  "pending": [
+    "Select OpenML datasets and exact splits",
+    "Finalize training recipes, search spaces, targets, seeds, comparison orders, budgets and artifact retention",
+    "Provide local datasets and a pinned BERT-Tiny checkpoint/tokenizer",
+    "Provide selected API model and credentials",
+    "Explicitly authorize research execution after settings review"
+  ]
+}

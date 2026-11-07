@@ -1,0 +1,209 @@
+{
+  "study_id": "mlp-demo",
+  "status": "approved",
+  "approval": {
+    "by": "user, in chat",
+    "date": "2026-11-04",
+    "scope": "Spambase only, as a demo of the approved settings.",
+    "recipe_policy": "User decision, 2026-11-04: set only constraints. Agents get no menu of choices.",
+    "attempts": "User decision, 2026-11-04: up to 20 attempts, with the compute budget as the real limit.",
+    "model": "User decision, 2026-11-04, before any result: a cheaper model, expected to make differences between harness designs more visible. Declared in advance.",
+    "device": "User decision, 2026-11-04: train the demo on the VM's GPU, which also tests the GPU path."
+  },
+  "policy": "../policy.json",
+  "arms": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "random"
+  ],
+  "stop_on_target": false,
+  "artifact_policy": {
+    "retain_epoch_checkpoints": false,
+    "retain_epoch_logits": true
+  },
+  "common_limits": {
+    "max_trials": 20,
+    "max_api_calls": 80,
+    "max_context_chars": 200000,
+    "max_output_tokens": 16000,
+    "max_diagnostic_requests": 0
+  },
+  "baseline_stage": {
+    "per_trial_seconds": {
+      "spambase": 600
+    }
+  },
+  "autopilot": {
+    "target_error_reduction": 0.1,
+    "per_trial_seconds_vs_baseline": 4.0,
+    "total_compute_vs_baseline_runs": 9.0,
+    "max_passes": 5,
+    "seconds_between_passes": 600,
+    "min_free_disk_gb": 20,
+    "max_api_usd": 100,
+    "score_test_at_end": true
+  },
+  "agent_stage": {
+    "model": "openrouter/openai/gpt-6-luna",
+    "reasoning_effort": null,
+    "api_base": "https://openrouter.ai/api/v1",
+    "api_timeout_seconds": 300,
+    "targets": {
+      "spambase": null
+    },
+    "per_trial_seconds": {
+      "spambase": null
+    },
+    "total_compute_seconds": {
+      "spambase": null
+    }
+  },
+  "tasks": {
+    "spambase": {
+      "template": "../spambase.template.json",
+      "device": "cuda",
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "max_parameters": 500000,
+      "initial_recipe": {
+        "hidden_sizes": [
+          128,
+          64
+        ],
+        "activation": "relu",
+        "normalization": "none",
+        "dropout": 0.1,
+        "optimizer": "adamw",
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "batch_size": 128,
+        "epochs": 50,
+        "schedule": "cosine",
+        "warmup_fraction": 0.0,
+        "decay_fraction": 0.2,
+        "momentum": 0.0,
+        "feature_preprocessing": "standard"
+      },
+      "recipe_policy": "constraints",
+      "max_epochs": 1000,
+      "random_search": {
+        "hidden_sizes": {
+          "layers": {
+            "depth": [
+              1,
+              4
+            ],
+            "width": [
+              16,
+              1024
+            ]
+          }
+        },
+        "activation": {
+          "choice": [
+            "relu",
+            "tanh",
+            "gelu"
+          ]
+        },
+        "normalization": {
+          "choice": [
+            "none",
+            "layer_norm"
+          ]
+        },
+        "dropout": {
+          "uniform": [
+            0.0,
+            0.5
+          ]
+        },
+        "optimizer": {
+          "choice": [
+            "adamw",
+            "sgd"
+          ]
+        },
+        "momentum": {
+          "uniform": [
+            0.0,
+            0.95
+          ]
+        },
+        "learning_rate": {
+          "by_optimizer": {
+            "adamw": [
+              0.0001,
+              0.01
+            ],
+            "sgd": [
+              0.001,
+              0.3
+            ]
+          }
+        },
+        "weight_decay": {
+          "log_uniform": [
+            1e-06,
+            0.01
+          ]
+        },
+        "batch_size": {
+          "int_log": [
+            16,
+            512
+          ]
+        },
+        "epochs": {
+          "int": [
+            25,
+            100
+          ]
+        },
+        "schedule": {
+          "choice": [
+            "constant",
+            "cosine",
+            "wsd"
+          ]
+        },
+        "warmup_fraction": {
+          "uniform": [
+            0.0,
+            0.2
+          ]
+        },
+        "feature_preprocessing": {
+          "choice": [
+            "standard",
+            "none",
+            "signed_log_standard"
+          ]
+        },
+        "class_weighting": {
+          "choice": [
+            "none",
+            "balanced"
+          ]
+        },
+        "sampling": {
+          "choice": [
+            "shuffle",
+            "balanced"
+          ]
+        },
+        "label_smoothing": {
+          "uniform": [
+            0.0,
+            0.2
+          ]
+        }
+      }
+    }
+  }
+}

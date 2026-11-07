@@ -1,0 +1,6 @@
+{
+  "cases": [
+    {"task": "mlp-demo.json", "seeds": [11, 17]}
+  ],
+  "note": "CPU software check only. Demonstrates matched comparisons; mock/demo runs cannot promote a workflow."
+}

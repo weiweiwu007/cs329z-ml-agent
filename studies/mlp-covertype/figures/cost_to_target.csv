@@ -1,0 +1,16 @@
+task,seed,arm,target,reached,experiments_to_target,compute_seconds_to_target
+covertype,1,A,0.8366,True,2,54.37858195975423
+covertype,2,A,0.8366,True,2,83.0534244813025
+covertype,3,A,0.8366,True,2,84.14657843858004
+covertype,1,B,0.8366,True,2,71.26882450655103
+covertype,2,B,0.8366,True,2,67.10416992381215
+covertype,3,B,0.8366,True,2,74.48205555416644
+covertype,1,C,0.8366,True,2,55.431554129347205
+covertype,2,C,0.8366,True,2,67.84821823053062
+covertype,3,C,0.8366,True,2,55.90026705339551
+covertype,1,D,0.8366,True,2,38.398507721722126
+covertype,2,D,0.8366,True,2,52.84332364797592
+covertype,3,D,0.8366,True,2,67.50882952101529
+covertype,1,random,0.8366,False,,
+covertype,2,random,0.8366,False,,
+covertype,3,random,0.8366,False,,

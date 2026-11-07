@@ -1,0 +1,6 @@
+task,contrast,question,seeds,best_score_difference_mean,best_score_difference_by_seed,seeds_favoring_change,capped_compute_to_target_difference_mean,experiments_to_target_difference_mean_where_both_reached,best_model_parameters_difference_mean,seeds_reaching_target_with_change,seeds_reaching_target_without_change,seeds_with_baseline_already_at_target
+covertype,B_vs_A,"Error reports, no reviewer",3,-0.011230443537976975,-0.02944;-0.02648;+0.02223,1,-38.13762235455215,0.0,22101.333333333332,3,3,0
+covertype,D_vs_C,"Error reports, with reviewer",3,0.007200105563300714,+0.01019;+0.00437;+0.00704,3,13.010152533029517,0.0,200576.0,3,3,0
+covertype,C_vs_A,"Reviewer, no error reports",3,-0.0035742356700688336,-0.00404;-0.01083;+0.00415,1,-76.96487372244398,0.0,-32512.0,3,3,0
+covertype,D_vs_B,"Reviewer, with error reports",3,0.014856313431208856,+0.03559;+0.02002;-0.01104,2,-25.81709883486231,0.0,145962.66666666666,3,3,0
+covertype,interaction,Does the reviewer help more when it has error reports? (D-B)-(C-A),3,0.01843054910127769,+0.03963;+0.03085;-0.01519,,,,,,,

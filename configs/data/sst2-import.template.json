@@ -1,0 +1,33 @@
+{
+  "protocol_status": "draft",
+  "identity": "sst2",
+  "revision": null,
+  "kind": "text_tsv",
+  "selection_rule": null,
+  "selection_seed": null,
+  "sources": {
+    "labeled_source": {
+      "path": null,
+      "sha256": null
+    }
+  },
+  "splits": {
+    "train": {
+      "source": "labeled_source",
+      "indices": null
+    },
+    "validation": {
+      "source": "labeled_source",
+      "indices": null
+    },
+    "test": {
+      "source": "labeled_source",
+      "indices": null
+    }
+  },
+  "delimiter": "\t",
+  "label_column": "label",
+  "text_columns": {
+    "sentence": "sentence"
+  }
+}

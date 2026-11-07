@@ -1,0 +1,56 @@
+{
+  "task_id": "mlp-software-demo",
+  "adapter": "mlp_classification",
+  "purpose": "demo",
+  "protocol_status": "demo",
+  "dataset": {
+    "kind": "synthetic_fixture",
+    "identity": "seeded-nonlinear-classification-software-fixture",
+    "revision": "v1",
+    "input_dim": 8,
+    "num_classes": 2,
+    "standardize": true,
+    "seed": 73,
+    "train_rows": 128,
+    "validation_rows": 64,
+    "test_rows": 64
+  },
+  "initial_recipe": {
+    "hidden_sizes": [16],
+    "activation": "relu",
+    "normalization": "none",
+    "dropout": 0.0,
+    "optimizer": "adamw",
+    "learning_rate": 0.01,
+    "weight_decay": 0.0,
+    "batch_size": 32,
+    "epochs": 4,
+    "schedule": "constant",
+    "warmup_fraction": 0.0,
+    "decay_fraction": 0.2
+  },
+  "search_space": {
+    "learning_rate": [0.005, 0.01, 0.02],
+    "schedule": ["constant", "cosine", "wsd"],
+    "normalization": ["none", "layer_norm"],
+    "hidden_sizes": [[16], [32], [16, 16]],
+    "activation": ["relu", "tanh", "gelu"],
+    "dropout": [0.0, 0.1],
+    "weight_decay": [0.0, 0.001]
+  },
+  "metric": "accuracy",
+  "target": 0.99,
+  "seed": 7,
+  "device": "cpu",
+  "artifact_policy": {"retain_epoch_checkpoints": true, "retain_epoch_logits": true},
+  "limits": {
+    "max_trials": 4,
+    "max_parameters": 10000,
+    "max_epochs": 4,
+    "per_trial_seconds": 20,
+    "total_compute_seconds": 60,
+    "max_api_calls": 12,
+    "max_context_chars": 48000,
+    "max_output_tokens": 3000
+  }
+}

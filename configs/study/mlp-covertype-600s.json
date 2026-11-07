@@ -1,0 +1,213 @@
+{
+  "study_id": "mlp-covertype-600s",
+  "status": "approved",
+  "approval": {
+    "by": "user, in chat",
+    "date": "2026-11-04",
+    "scope": "Covertype only, MLP only, 600 seconds of compute per run.",
+    "dataset": "User decision, 2026-11-04: replace Spambase, whose starting model left little room to improve, with a harder MLP task.",
+    "compute": "User decision, 2026-11-04, after seeing the 168-second run: that budget is too tight, widen it to 600 seconds per run. The starting recipe stays at 5 epochs so the budget is the only change for A-D. The per-attempt limit keeps the existing 4:9 ratio to the run budget, which gives 267 seconds.",
+    "recipe_policy": "User decision, 2026-11-04: set only constraints. Agents get no menu of choices.",
+    "attempts": "User decision, 2026-11-04: up to 20 attempts, with the compute budget as the real limit.",
+    "model": "User decision, 2026-11-04, before any result: a cheaper model, expected to make differences between harness designs more visible. Declared in advance.",
+    "device": "User decision, 2026-11-04: train on the VM's GPU.",
+    "random_search": "Scaled by the existing rule: 600 s is 9 times what about 18 epochs take at the starting speed, so epochs span 0.5x to 2x of 18, and the step cap of 2.5x those 18 epochs is 9x the 5-epoch starting recipe."
+  },
+  "policy": "../policy.json",
+  "arms": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "random"
+  ],
+  "stop_on_target": false,
+  "artifact_policy": {
+    "retain_epoch_checkpoints": false,
+    "retain_epoch_logits": true
+  },
+  "common_limits": {
+    "max_trials": 20,
+    "max_api_calls": 80,
+    "max_context_chars": 200000,
+    "max_output_tokens": 16000,
+    "max_diagnostic_requests": 0
+  },
+  "baseline_stage": {
+    "per_trial_seconds": {
+      "covertype": 1800
+    }
+  },
+  "autopilot": {
+    "target_error_reduction": 0.1,
+    "per_trial_seconds_vs_baseline": 4.0,
+    "total_compute_vs_baseline_runs": 9.0,
+    "max_passes": 5,
+    "seconds_between_passes": 600,
+    "min_free_disk_gb": 20,
+    "max_api_usd": 100,
+    "score_test_at_end": true
+  },
+  "agent_stage": {
+    "model": "openrouter/openai/gpt-6-luna",
+    "reasoning_effort": null,
+    "api_base": "https://openrouter.ai/api/v1",
+    "api_timeout_seconds": 300,
+    "targets": {
+      "covertype": null
+    },
+    "per_trial_seconds": {
+      "covertype": 267
+    },
+    "total_compute_seconds": {
+      "covertype": 600
+    }
+  },
+  "tasks": {
+    "covertype": {
+      "template": "../covertype.template.json",
+      "device": "cuda",
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "max_parameters": 500000,
+      "initial_recipe": {
+        "hidden_sizes": [
+          128,
+          64
+        ],
+        "activation": "relu",
+        "normalization": "none",
+        "dropout": 0.1,
+        "optimizer": "adamw",
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "batch_size": 128,
+        "epochs": 5,
+        "schedule": "cosine",
+        "warmup_fraction": 0.0,
+        "decay_fraction": 0.2,
+        "momentum": 0.0,
+        "feature_preprocessing": "standard"
+      },
+      "recipe_policy": "constraints",
+      "max_epochs": 1000,
+      "random_search": {
+        "hidden_sizes": {
+          "layers": {
+            "depth": [
+              1,
+              4
+            ],
+            "width": [
+              16,
+              1024
+            ]
+          }
+        },
+        "activation": {
+          "choice": [
+            "relu",
+            "tanh",
+            "gelu"
+          ]
+        },
+        "normalization": {
+          "choice": [
+            "none",
+            "layer_norm"
+          ]
+        },
+        "dropout": {
+          "uniform": [
+            0.0,
+            0.5
+          ]
+        },
+        "optimizer": {
+          "choice": [
+            "adamw",
+            "sgd"
+          ]
+        },
+        "momentum": {
+          "uniform": [
+            0.0,
+            0.95
+          ]
+        },
+        "learning_rate": {
+          "by_optimizer": {
+            "adamw": [
+              0.0001,
+              0.01
+            ],
+            "sgd": [
+              0.001,
+              0.3
+            ]
+          }
+        },
+        "weight_decay": {
+          "log_uniform": [
+            1e-06,
+            0.01
+          ]
+        },
+        "batch_size": {
+          "int_log": [
+            16,
+            512
+          ]
+        },
+        "epochs": {
+          "int": [
+            9,
+            36
+          ]
+        },
+        "schedule": {
+          "choice": [
+            "constant",
+            "cosine",
+            "wsd"
+          ]
+        },
+        "warmup_fraction": {
+          "uniform": [
+            0.0,
+            0.2
+          ]
+        },
+        "feature_preprocessing": {
+          "choice": [
+            "standard",
+            "none",
+            "signed_log_standard"
+          ]
+        },
+        "class_weighting": {
+          "choice": [
+            "none",
+            "balanced"
+          ]
+        },
+        "sampling": {
+          "choice": [
+            "shuffle",
+            "balanced"
+          ]
+        },
+        "label_smoothing": {
+          "uniform": [
+            0.0,
+            0.2
+          ]
+        },
+        "max_steps_vs_baseline": 9.0
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "task_id": "choose-task-id",
+  "adapter": "mlp_classification",
+  "purpose": "development",
+  "protocol_status": "draft",
+  "dataset": {
+    "identity": null,
+    "revision": null,
+    "input_dim": null,
+    "num_classes": null,
+    "standardize": null,
+    "seed": null,
+    "train_rows": null,
+    "validation_rows": null,
+    "test_rows": null,
+    "train_csv": null,
+    "validation_csv": null,
+    "test_csv": null,
+    "train_sha256": null,
+    "validation_sha256": null,
+    "test_sha256": null,
+    "kind": "local_csv",
+    "label_column": "label"
+  },
+  "initial_recipe": null,
+  "search_space": {},
+  "metric": null,
+  "target": null,
+  "seed": null,
+  "device": null,
+  "artifact_policy": null,
+  "limits": null
+}

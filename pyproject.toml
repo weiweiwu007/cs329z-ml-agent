@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rsi-ml"
+version = "0.1.0"
+description = "A measured, multi-agent ML development loop for CS329Z"
+requires-python = ">=3.12"
+dependencies = ["langgraph>=1.0,<2", "pydantic>=2.10,<3", "numpy>=2,<3", "torch>=2.6,<3", "matplotlib>=3.9,<4"]
+
+[project.optional-dependencies]
+api = ["dspy>=3.4.1,<4"]
+text = ["transformers>=4.57,<5", "safetensors>=0.4"]
+data = ["pyarrow>=15"]
+all = ["rsi-ml[api,text,data]"]
+dev = ["pytest>=8,<10", "ruff>=0.9"]
+
+[project.scripts]
+rsi-ml = "rsi_ml.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+rsi_ml = ["knowledge.json", "intake_ui.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["slow: runs the whole study pipeline with real subprocess training"]
+
+[tool.ruff]
+line-length = 100

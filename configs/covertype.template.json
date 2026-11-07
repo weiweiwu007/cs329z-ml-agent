@@ -1,0 +1,68 @@
+{
+  "task_id": "covertype",
+  "adapter": "mlp_classification",
+  "purpose": "evaluation",
+  "protocol_status": "draft",
+  "dataset": {
+    "kind": "local_csv",
+    "identity": "covertype",
+    "revision": null,
+    "input_dim": 54,
+    "num_classes": 7,
+    "standardize": true,
+    "seed": null,
+    "train_rows": null,
+    "validation_rows": null,
+    "test_rows": null,
+    "label_column": "label",
+    "train_csv": null,
+    "train_sha256": null,
+    "validation_csv": null,
+    "validation_sha256": null,
+    "test_csv": null,
+    "test_sha256": null,
+    "split_manifest": null,
+    "split_manifest_sha256": null
+  },
+  "initial_recipe": {
+    "dropout": null,
+    "optimizer": null,
+    "learning_rate": null,
+    "weight_decay": null,
+    "batch_size": null,
+    "epochs": null,
+    "schedule": null,
+    "warmup_fraction": null,
+    "decay_fraction": null,
+    "momentum": null,
+    "hidden_sizes": [
+      128,
+      64
+    ],
+    "activation": "relu",
+    "normalization": "none",
+    "label_smoothing": 0.0,
+    "class_weighting": "none",
+    "sampling": "shuffle"
+  },
+  "metric": "accuracy",
+  "target": null,
+  "seed": null,
+  "device": null,
+  "limits": {
+    "max_trials": null,
+    "max_parameters": null,
+    "max_epochs": null,
+    "per_trial_seconds": null,
+    "total_compute_seconds": null,
+    "max_api_calls": null,
+    "max_context_chars": null,
+    "max_output_tokens": null,
+    "max_diagnostic_requests": null
+  },
+  "search_space": {},
+  "artifact_policy": {
+    "retain_epoch_checkpoints": null,
+    "retain_epoch_logits": null
+  }
+}

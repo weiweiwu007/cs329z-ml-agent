@@ -1,0 +1,11 @@
+1. Improve an MLP that predicts forest cover type from terrain and soil features.
+
+2. Use UCI Covertype.
+
+3. Predict one of the seven forest cover types, measured by accuracy.
+
+4. Use the existing 60/20/20 split.
+
+5. 600 seconds of compute, at most 500,000 parameters.
+
+6. Start.

@@ -1,0 +1,6 @@
+task,arm,decisions,improvement,tie,regression,budget_cut,failure,exact_repeats
+covertype,A,10,6,0,3,1,0,0
+covertype,B,12,6,0,5,1,0,0
+covertype,C,16,9,0,5,2,0,1
+covertype,D,15,9,0,4,2,0,1
+covertype,random,23,2,0,18,3,0,0
